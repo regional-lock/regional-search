@@ -1,61 +1,67 @@
-# 🎬 RegionalSearch — Premium Movie Discovery
+# 🎬 RegionalSearch — Premium Movie Discovery Platform
 
 ![Vercel Deployment](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 ![TMDB API](https://img.shields.io/badge/TMDB-01b4e4?style=for-the-badge&logo=the-movie-database&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/Vanilla_JS-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 
-**RegionalSearch** (formerly StreamFinder Pro) adalah platform penemuan film dan acara TV modern yang dirancang dengan estetika *Dark Mode* dan *Glassmorphism*. Dilengkapi dengan fitur pelacakan ketersediaan layanan streaming berdasarkan wilayah geografis secara real-time.
+**RegionalSearch** is a modern movie and TV show discovery platform designed with a high-end **Dark Mode** and **Glassmorphism** aesthetic. It provides users with real-time streaming availability data based on their geographic region.
 
-[🚀 Lihat Demo Langsung](https://regional-search.vercel.app)
-
----
-
-## ✨ Fitur Unggulan
-
-* **⚡ Instant Navigation Search**: Cari judul favorit Anda dari halaman mana pun tanpa perlu memuat ulang halaman.
-* **🌍 Regional Streaming Data**: Mengetahui di mana sebuah film tersedia untuk ditonton (Netflix, Disney+, HBO, dll) berdasarkan negara.
-* **📱 Fully Responsive Design**: Antarmuka yang optimal untuk Desktop hingga Mobile dengan *Hamburger Menu* yang interaktif.
-* **📂 Structured Explorer**: Halaman khusus untuk **Movies** dan **TV Shows** dengan pagination yang lancar.
-* **💾 Personal Watchlist**: Simpan koleksi film favorit Anda langsung di browser menggunakan LocalStorage.
-* **🔗 Clean URL Architecture**: Navigasi yang ramah pengguna dengan format `/movies/:id` (via Vercel Rewrites).
+[🚀 View Live Demo](https://regional-search.vercel.app)
 
 ---
 
-## 🛠️ Teknologi yang Digunakan
+## ✨ Key Features
 
-* **Frontend**: HTML5, CSS3 (Custom Variables, Flexbox, Grid), Vanilla JavaScript (ES6+).
-* **API**: [The Movie Database (TMDB)](https://www.themoviedb.org/documentation/api).
-* **Deployment**: Vercel dengan konfigurasi `vercel.json` untuk *Server-side rewrites*.
-* **Design Concept**: Glassmorphism & High-Contrast Dark Theme.
-
----
-
-## 📸 Tampilan Antarmuka
-
-| Desktop View | Mobile Menu |
-|---|---|
-| <img src="https://via.placeholder.com/800x450/050508/FFFFFF?text=Desktop+Preview" width="400"> | <img src="https://via.placeholder.com/300x600/050508/FFFFFF?text=Mobile+Preview" width="150"> |
+* **⚡ Instant Navigation Search**: Search for your favorite titles from any page with real-time results—no page reloads required.
+* **🌍 Regional Streaming Data**: Track exactly where a movie is available (Netflix, Disney+, HBO, etc.) filtered by country.
+* **📱 Fully Responsive Design**: Seamless interface from Desktop to Mobile, featuring an interactive **Hamburger Menu** for smaller screens.
+* **📂 Structured Explorer**: Dedicated sections for **Movies** and **TV Shows** with smooth pagination.
+* **💾 Personal Watchlist**: Save your must-watch collection directly in your browser using LocalStorage.
+* **🔗 Clean URL Architecture**: User-friendly navigation using `/movies/:id` and `/tv/:id` formats (powered by Vercel Rewrites).
 
 ---
 
-## ⚙️ Cara Menjalankan Lokal
+## 🛠️ Technology Stack
 
-1.  **Clone repositori ini:**
+* **Frontend**: HTML5, CSS3 (Custom Variables, Flexbox, CSS Grid), Vanilla JavaScript (ES6+).
+* **Data Source**: [The Movie Database (TMDB) API](https://www.themoviedb.org/documentation/api).
+* **Deployment**: Vercel with custom `vercel.json` for Server-side rewrites.
+* **UI Design**: Minimalist Dark Theme with Glassmorphism effects.
+
+---
+
+## 📸 Interface Preview
+
+<img width="1912" height="922" alt="image" src="https://github.com/user-attachments/assets/492c4074-1356-4ac6-b53f-73373ce92436" />
+<img width="1912" height="922" alt="image" src="https://github.com/user-attachments/assets/2add94c9-1efe-4dd2-9c15-ad4cc0fabe77" />
+<img width="1794" height="1772" alt="image" src="https://github.com/user-attachments/assets/6a60f040-bfde-4d77-98e8-a7e3751a3327" />
+<img width="1794" height="1772" alt="image" src="https://github.com/user-attachments/assets/bd0dc43f-d843-4914-a989-19622cf54e36" />
+<img width="1794" height="865" alt="image" src="https://github.com/user-attachments/assets/a4a3619c-f65f-443a-85e9-f09b9afdd7f2" />
+<img width="1794" height="3336" alt="image" src="https://github.com/user-attachments/assets/c83a1ac3-5094-4b58-9da0-f3e3a9993978" />
+<img width="1794" height="2777" alt="image" src="https://github.com/user-attachments/assets/3490c8f6-73b0-4370-a6c0-f2391e4428f7" />
+
+
+
+---
+
+## ⚙️ Local Development
+
+1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/username/regional-search.git](https://github.com/username/regional-search.git)
+    git clone [https://github.com/yourusername/regional-search.git](https://github.com/yourusername/regional-search.git)
     ```
-2.  **Dapatkan API Key:**
-    Daftar di [TMDB](https://www.themoviedb.org/) untuk mendapatkan API Key.
-3.  **Konfigurasi:**
-    Masukkan API Key Anda ke dalam variabel `API_KEY` di setiap file `.html`.
-4.  **Buka file:**
-    Cukup buka `index.html` di browser Anda atau gunakan ekstensi *Live Server* di VS Code.
+2.  **Get your API Key:**
+    Sign up at [TMDB](https://www.themoviedb.org/) to obtain your free API Key.
+3.  **Configuration:**
+    Open the files and replace the `API_KEY` variable with your own key.
+4.  **Run the project:**
+    Simply open `index.html` in your browser or use the *Live Server* extension in VS Code.
 
 ---
 
-## 🚀 Konfigurasi Deployment (Vercel)
+## 🚀 Vercel Deployment Configuration
 
-Proyek ini menggunakan `vercel.json` untuk menangani navigasi URL yang bersih:
+This project utilizes `vercel.json` to handle clean URL routing:
 
 ```json
 {
