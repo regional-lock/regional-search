@@ -522,6 +522,25 @@
                 display: none;
             }
         }
+        footer {
+    background: #08080a;
+    padding: 60px 0 30px;
+    border-top: 1px solid var(--border);
+    margin-top: auto; /* Menjaga footer tetap di bawah */
+}
+
+.footer-content {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    flex-wrap: wrap; 
+    gap: 20px;
+}
+
+.footer-copy {
+    color: var(--sub-text); 
+    font-size: 0.9rem;
+}
     </style>
 </head>
 
@@ -822,8 +841,18 @@
         }
         window.addEventListener('storage', (e) => { if (e.key === 'sf_watchlist') updateNavCounter(); });
     </script>
+    <footer>
+    <div class="container footer-content">
+        <div class="logo">REGIONAL<span>SEARCH</span></div>
+        
+        <div class="footer-copy">
+            ©2025 RegionalSearch.
+        </div>
+    </div>
+</footer>
 </body>
 
 </html>
+
 
 
