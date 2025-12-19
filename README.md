@@ -32,8 +32,7 @@
 
 ## 📸 Interface Preview
 
-<img width="1912" height="922" alt="image" src="https://github.com/user-attachments/assets/492c4074-1356-4ac6-b53f-73373ce92436" />
-<img width="1912" height="922" alt="image" src="https://github.com/user-attachments/assets/2add94c9-1efe-4dd2-9c15-ad4cc0fabe77" />
+<img width="1794" height="2185" alt="image" src="https://github.com/user-attachments/assets/a77a5d75-f5e2-471e-84bb-4d63420f7a91" />
 <img width="1794" height="1772" alt="image" src="https://github.com/user-attachments/assets/6a60f040-bfde-4d77-98e8-a7e3751a3327" />
 <img width="1794" height="1772" alt="image" src="https://github.com/user-attachments/assets/bd0dc43f-d843-4914-a989-19622cf54e36" />
 <img width="1794" height="865" alt="image" src="https://github.com/user-attachments/assets/a4a3619c-f65f-443a-85e9-f09b9afdd7f2" />
