@@ -347,6 +347,25 @@
                 width: 180px;
             }
         }
+        footer {
+    background: #08080a;
+    padding: 60px 0 30px;
+    border-top: 1px solid var(--border);
+    margin-top: auto; /* Menjaga footer tetap di bawah */
+}
+
+.footer-content {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    flex-wrap: wrap; 
+    gap: 20px;
+}
+
+.footer-copy {
+    color: var(--sub-text); 
+    font-size: 0.9rem;
+}
     </style>
 </head>
 
@@ -532,7 +551,17 @@
             if (countEl) countEl.innerText = watchlist.length;
         }
     </script>
+    <footer>
+    <div class="container footer-content">
+        <div class="logo">STREAM<span>FINDER</span></div>
+        
+        <div class="footer-copy">
+            © 2025 StreamFinder Pro. All rights reserved.
+        </div>
+    </div>
+</footer>
 </body>
 
 
 </html>
+
