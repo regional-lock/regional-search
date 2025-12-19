@@ -322,6 +322,15 @@
             margin-bottom: 5px;
         }
 
+        .card-info {
+            font-size: 0.75rem;
+            color: var(--sub-text);
+            font-weight: 600;
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
         .rating-val {
             color: var(--accent);
             display: flex;
@@ -558,7 +567,7 @@
 
             <div class="streaming-container">
                 <h3
-                    style="margin-top: 0; color: var(--sub-text); font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 900;">
+                    style="margin-top: 0; color: var(--sub-text); font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 900; margin-bottom: 20px;">
                     Streaming Availability by Region</h3>
                 <div id="dProviders">
                     <p style="color:var(--sub-text);">Fetching region data...</p>
@@ -628,10 +637,6 @@
 
         function renderNavResults(items) {
             navSearchResults.innerHTML = '';
-            if (!items || items.length === 0) {
-                navSearchResults.innerHTML = '<p style="color:var(--sub-text); padding-left:15px;">No titles found.</p>';
-                return;
-            }
             items.forEach(m => {
                 if (!m.poster_path) return;
                 const type = m.media_type || (m.title ? 'movie' : 'tv');
@@ -643,7 +648,10 @@
                     <img src="${IMG + m.poster_path}" loading="lazy">
                     <div class="card-meta">
                         <div class="card-title">${m.title || m.name}</div>
-                        <div class="rating-val">★ ${(m.vote_average || 0).toFixed(1)}</div>
+                        <div class="card-info">
+                            <span>${year}</span> <span>•</span>
+                            <span class="rating-val">★ ${(m.vote_average || 0).toFixed(1)}</span>
+                        </div>
                     </div>`;
                 card.onclick = () => window.location.href = `detail.html?id=${m.id}&type=${type}`;
                 navSearchResults.appendChild(card);
@@ -667,7 +675,7 @@
                 const videos = await vRes.json();
                 const credits = await cRes.json();
 
-                const trailer = videos.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
+                const trailer = videos.results.find(v => v.site === 'YouTube' && v.type === 'Trailer') || videos.results[0];
                 trailerKey = trailer ? trailer.key : '';
 
                 document.getElementById('bgCanvas').style.backgroundImage = `url(${IMG + (m.backdrop_path || m.poster_path)})`;
@@ -679,7 +687,6 @@
                     release_date: m.release_date || m.first_air_date
                 };
 
-                // Render Hero
                 document.getElementById('detailHero').innerHTML = `
                     <img src="${IMG + m.poster_path}" class="detail-poster">
                     <div style="flex:1; min-width:300px;">
@@ -712,27 +719,28 @@
                         </div>`).join('');
                 }
 
-                // Render Seasons
+                // Render Seasons (DENGAN TAHUN)
                 if (type === 'tv' && m.seasons) {
                     const seasonGrid = document.getElementById('seasonGrid');
                     document.getElementById('seasonSection').style.display = 'block';
-                    seasonGrid.innerHTML = m.seasons.filter(s => s.poster_path).map(s => `
+                    seasonGrid.innerHTML = m.seasons.filter(s => s.poster_path).map(s => {
+                        const sYear = s.air_date ? s.air_date.split('-')[0] : 'N/A';
+                        return `
                         <div class="season-card">
                             <img src="${IMG + s.poster_path}" loading="lazy">
                             <div style="padding:12px;">
                                 <div style="font-weight:900; font-size:0.85rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${s.name}</div>
-                                <div style="font-size:0.7rem; color:var(--sub-text);">${s.episode_count} Episodes</div>
+                                <div style="font-size:0.7rem; color:var(--sub-text);">${sYear} • ${s.episode_count} Episodes</div>
                             </div>
-                        </div>`).join('');
+                        </div>`;
+                    }).join('');
                 }
 
                 // Render Providers
                 const platMap = {};
-                const results = providers.results || {};
-                Object.keys(results).forEach(code => {
-                    const country = results[code];
-                    const all = [...(country.flatrate || []), ...(country.rent || []), ...(country.buy || [])];
-                    all.forEach(p => {
+                Object.keys(providers.results || {}).forEach(code => {
+                    const country = providers.results[code];
+                    [...(country.flatrate || []), ...(country.rent || []), ...(country.buy || [])].forEach(p => {
                         if (!platMap[p.provider_name]) platMap[p.provider_name] = { logo: p.logo_path, countries: [] };
                         if (!platMap[p.provider_name].countries.find(c => c.code === code)) {
                             let name = code; try { name = regionNames.of(code); } catch (e) { }
@@ -751,26 +759,30 @@
                             <div>
                                 <div style="font-weight:900; margin-bottom:8px;">${name}</div>
                                 <div style="display:flex; flex-wrap:wrap; gap:8px;">
-                                    ${data.countries.sort((a, b) => a.name.localeCompare(b.name)).map(c => `
-                                        <span class="c-badge"><b>${c.code}</b> <span>${c.name}</span></span>`).join('')}
+                                    ${data.countries.sort((a, b) => a.name.localeCompare(b.name)).map(c => `<span class="c-badge"><b>${c.code}</b> <span>${c.name}</span></span>`).join('')}
                                 </div>
                             </div>
                         </div>`;
                 });
 
-                // Render Recommendations
+                // Render Recommendations (DENGAN TAHUN & RATING)
                 if (recs.results && recs.results.length > 0) {
                     const recGrid = document.getElementById('recommendationsGrid');
                     document.getElementById('recommendationsSection').style.display = 'block';
                     recGrid.innerHTML = recs.results.slice(0, 6).map(item => {
-                        const itemType = item.media_type || (item.title ? 'movie' : 'tv');
+                        if (!item.poster_path) return '';
+                        const rType = item.media_type || (item.title ? 'movie' : 'tv');
+                        const rYear = (item.release_date || item.first_air_date || '').split('-')[0] || 'N/A';
                         return `
-                        <div class="card" onclick="location.href='detail.html?id=${item.id}&type=${itemType}'">
-                            <div class="media-badge ${itemType === 'movie' ? 'badge-movie' : 'badge-series'}">${itemType}</div>
+                        <div class="card" onclick="window.location.href='detail.html?id=${item.id}&type=${rType}'">
+                            <div class="media-badge ${rType === 'movie' ? 'badge-movie' : 'badge-series'}">${rType}</div>
                             <img src="${IMG + item.poster_path}" loading="lazy">
                             <div class="card-meta">
                                 <div class="card-title">${item.title || item.name}</div>
-                                <div class="rating-val">★ ${item.vote_average.toFixed(1)}</div>
+                                <div class="card-info">
+                                    <span>${rYear}</span> <span>•</span>
+                                    <span class="rating-val">★ ${item.vote_average.toFixed(1)}</span>
+                                </div>
                             </div>
                         </div>`;
                     }).join('');
