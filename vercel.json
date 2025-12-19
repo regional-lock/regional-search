@@ -1,0 +1,13 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/movies/:id",
+      "destination": "/detail.html?id=:id&type=movie"
+    },
+    {
+      "source": "/tv/:id",
+      "destination": "/detail.html?id=:id&type=tv"
+    }
+  ]
+}
