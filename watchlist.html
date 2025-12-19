@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Watchlist | StreamFinder Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&display=swap" rel="stylesheet">
+    <style>
+        /* Salin semua variabel :root dan CSS standar dari index.html Anda */
+        :root {
+            --bg: #050508;
+            --accent: #e50914;
+            --text: #ffffff;
+            --sub-text: #b3b3b3;
+            --border: rgba(255, 255, 255, 0.1);
+            --glass: rgba(10, 10, 15, 0.8);
+            --font-main: 'Outfit', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            font-family: var(--font-main);
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        /* Navbar Styles (Samakan dengan index.html) */
+        nav.main-nav {
+            background: rgba(5, 5, 8, 0.95);
+            border-bottom: 1px solid var(--border);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(15px);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 900;
+            text-decoration: none;
+            color: #fff;
+            letter-spacing: -1.5px;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--sub-text);
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .wl-badge {
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.65rem;
+            padding: 2px 7px;
+            border-radius: 20px;
+            font-weight: 900;
+        }
+
+        /* Watchlist Header */
+        .page-header {
+            padding: 60px 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 40px;
+        }
+
+        .btn-clear {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: inherit;
+            transition: 0.3s;
+        }
+
+        .btn-clear:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Grid Styles (Samakan dengan index.html) */
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            position: relative;
+            cursor: pointer;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: 0.4s;
+            border: 1px solid var(--border);
+            background: #000;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+        }
+
+        .card img {
+            width: 100%;
+            aspect-ratio: 2/3;
+            object-fit: cover;
+            background: #111;
+        }
+
+        .card-meta {
+            padding: 15px;
+        }
+
+        .card-title {
+            font-weight: 900;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+        }
+
+        .card-info {
+            font-size: 0.75rem;
+            color: var(--sub-text);
+            font-weight: 600;
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .rating-val {
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .media-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.65rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            z-index: 2;
+        }
+
+        .badge-movie {
+            background: var(--accent);
+            color: white;
+        }
+
+        .badge-tv {
+            background: #0070f3;
+            color: white;
+        }
+
+        #emptyState {
+            text-align: center;
+            padding: 100px 0;
+            display: none;
+        }
+
+        #emptyState h2 {
+            color: var(--sub-text);
+            margin-bottom: 20px;
+        }
+
+        .btn-browse {
+            background: var(--accent);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* --- HEADER NAVIGATION ENHANCEMENTS --- */
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin-left: 40px;
+            flex: 1;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--sub-text);
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: 0.3s;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-link:hover {
+            color: #fff;
+        }
+
+        /* Watchlist Badge */
+        .wl-badge {
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.65rem;
+            padding: 2px 7px;
+            border-radius: 20px;
+            font-weight: 900;
+        }
+
+        /* Dropdown Discover */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: rgba(15, 15, 20, 0.95);
+            backdrop-filter: blur(20px);
+            min-width: 180px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 10px 0;
+            z-index: 1001;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            margin-top: 10px;
+        }
+
+        .dropdown-content a {
+            color: var(--sub-text);
+            padding: 10px 20px;
+            text-decoration: none;
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .dropdown-content a:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--accent);
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .hide-mobile {
+                display: none;
+            }
+        }
+
+        /* --- GLOBAL NAVBAR SEARCH --- */
+        .nav-search-container {
+            position: relative;
+            margin-left: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        #navSearchInput {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 8px 15px 8px 35px;
+            color: #fff;
+            font-size: 0.85rem;
+            outline: none;
+            width: 180px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        #navSearchInput:focus {
+            width: 280px;
+            background: rgba(255, 255, 255, 0.12);
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(229, 9, 20, 0.2);
+        }
+
+        /* Ikon pencarian kecil */
+        .nav-search-container::before {
+            content: '🔍';
+            position: absolute;
+            left: 12px;
+            font-size: 0.75rem;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        @media (max-width: 900px) {
+            #navSearchInput {
+                width: 120px;
+            }
+
+            #navSearchInput:focus {
+                width: 180px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="main-nav">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">STREAM<span>FINDER</span></a>
+
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="movies.html" class="nav-link">Movies</a>
+                <a href="tv.html" class="nav-link">TV Shows</a>
+                <a href="watchlist.html" class="nav-link">
+                    Watchlist <span class="wl-badge" id="navWlCount">0</span>
+                </a>
+
+                <div class="nav-search-container">
+                    <input type="text" id="navSearchInput" placeholder="Quick search...">
+                </div>
+            </div>
+
+            <div class="hide-mobile"
+                style="font-size: 0.75rem; color: var(--sub-text); font-weight: 900; letter-spacing: 1px; text-align: right;">
+                GLOBAL<br>RELEASE TRACKER
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div id="mainContent">
+            <header class="page-header">
+                <div>
+                    <h1 style="margin: 0; font-size: 2.5rem; font-weight: 900;">My Collection</h1>
+                    <p style="color: var(--sub-text); margin: 5px 0 0;" id="countLabel">0 items saved</p>
+                </div>
+                <button class="btn-clear" onclick="clearWatchlist()">Clear All</button>
+            </header>
+
+            <div id="emptyState">
+                <h2>Your list is empty</h2>
+                <a href="index.html" class="btn-browse">Browse Movies & Shows</a>
+            </div>
+
+            <div id="watchlistGrid" class="movie-grid"></div>
+        </div>
+
+        <div id="searchView" style="display: none; margin-top: 40px;">
+            <h2
+                style="border-left: 4px solid var(--accent); padding-left: 15px; margin-bottom: 30px; font-size: 1.5rem; font-weight: 900;">
+                Search Results
+            </h2>
+            <div id="navSearchResults" class="movie-grid"></div>
+        </div>
+    </main>
+
+    <script>
+        const API_KEY = 'a820f2b45d233c0cc0c97d078536074f';
+        const IMG = 'https://image.tmdb.org/t/p/original';
+
+        // Elemen UI
+        const navSearch = document.getElementById('navSearchInput');
+        const mainContent = document.getElementById('mainContent');
+        const searchView = document.getElementById('searchView');
+        const navSearchResults = document.getElementById('navSearchResults');
+
+        window.onload = () => {
+            renderWatchlist();
+            updateNavCounter();
+        };
+
+        // --- LOGIKA INSTANT SEARCH NAVBAR ---
+        if (navSearch) {
+            navSearch.addEventListener('input', async function () {
+                const query = this.value.trim();
+
+                if (query.length > 2) {
+                    // Tampilkan view pencarian, sembunyikan koleksi
+                    mainContent.style.display = 'none';
+                    searchView.style.display = 'block';
+
+                    // Loading state (Skeletons)
+                    navSearchResults.innerHTML = '';
+                    for (let i = 0; i < 8; i++) navSearchResults.innerHTML += '<div class="skeleton-card skeleton"></div>';
+
+                    try {
+                        const res = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
+                        const data = await res.json();
+                        renderNavResults(data.results);
+                    } catch (err) {
+                        console.error("Search error:", err);
+                    }
+                } else {
+                    // Jika input kosong atau < 3 huruf, kembalikan ke koleksi
+                    mainContent.style.display = 'block';
+                    searchView.style.display = 'none';
+                }
+            });
+        }
+
+        // Fungsi merender hasil pencarian dari navbar
+        function renderNavResults(items) {
+            navSearchResults.innerHTML = '';
+            if (!items || items.length === 0) {
+                navSearchResults.innerHTML = '<p style="color:var(--sub-text); padding-left:15px;">No titles found for your search.</p>';
+                return;
+            }
+
+            items.forEach(m => {
+                if (!m.poster_path) return;
+                const type = m.media_type || (m.title ? 'movie' : 'tv');
+                const date = m.release_date || m.first_air_date || '';
+                const year = date ? date.split('-')[0] : 'N/A';
+                const rating = m.vote_average ? m.vote_average.toFixed(1) : '0.0';
+
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                <div class="media-badge ${type === 'movie' ? 'badge-movie' : 'badge-tv'}">${type}</div>
+                <img src="${IMG + m.poster_path}" loading="lazy">
+                <div class="card-meta">
+                    <div class="card-title">${m.title || m.name}</div>
+                    <div class="card-info">
+                        <span>${year}</span> <span style="opacity:0.5">•</span> 
+                        <span class="rating-val">★ ${rating}</span>
+                    </div>
+                </div>
+            `;
+                card.onclick = () => window.location.href = `detail.html?id=${m.id}&type=${type}`;
+                navSearchResults.appendChild(card);
+            });
+        }
+
+        // --- LOGIKA KOLEKSI (WATCHLIST) ---
+        function renderWatchlist() {
+            const watchlist = JSON.parse(localStorage.getItem('sf_watchlist')) || [];
+            const grid = document.getElementById('watchlistGrid');
+            const empty = document.getElementById('emptyState');
+            const countLabel = document.getElementById('countLabel');
+
+            grid.innerHTML = '';
+            countLabel.innerText = `${watchlist.length} items saved`;
+
+            if (watchlist.length === 0) {
+                empty.style.display = 'block';
+                return;
+            }
+
+            empty.style.display = 'none';
+            watchlist.forEach(m => {
+                const year = (m.release_date || '').split('-')[0] || 'N/A';
+                const rating = m.vote_average ? m.vote_average.toFixed(1) : '0.0';
+
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                <div class="media-badge ${m.type === 'movie' ? 'badge-movie' : 'badge-tv'}">${m.type}</div>
+                <img src="${IMG + m.poster_path}" loading="lazy">
+                <div class="card-meta">
+                    <div class="card-title">${m.title}</div>
+                    <div class="card-info">
+                        <span>${year}</span>
+                        <span style="opacity:0.5">•</span>
+                        <span class="rating-val">★ ${rating}</span>
+                    </div>
+                </div>
+            `;
+                card.onclick = () => window.location.href = `detail.html?id=${m.id}&type=${m.type}`;
+                grid.appendChild(card);
+            });
+        }
+
+        function clearWatchlist() {
+            if (confirm("Are you sure you want to clear your entire list?")) {
+                localStorage.removeItem('sf_watchlist');
+                renderWatchlist();
+                updateNavCounter();
+            }
+        }
+
+        function updateNavCounter() {
+            const watchlist = JSON.parse(localStorage.getItem('sf_watchlist')) || [];
+            const countEl = document.getElementById('navWlCount');
+            if (countEl) countEl.innerText = watchlist.length;
+        }
+    </script>
+</body>
+
+</html>
