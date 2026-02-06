@@ -553,21 +553,60 @@
         }
 
         .c-badge {
-            background: rgba(229, 9, 20, 0.1);
-            color: var(--accent);
-            padding: 6px 14px;
-            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            padding: 8px 14px;
+            border-radius: 10px;
             font-size: 0.75rem;
-            border: 1px solid rgba(229, 9, 20, 0.2);
-            font-weight: 900;
+            border: 1px solid var(--border);
+            font-weight: 600;
             display: flex;
-            gap: 5px;
+            flex-wrap: wrap;
+            gap: 6px;
             align-items: center;
         }
 
-        .c-badge span {
-            color: #fff;
+        .c-badge b {
+            color: var(--accent);
+            font-weight: 900;
+        }
+
+        .c-badge .country-name {
+            color: var(--sub-text);
             font-weight: 400;
+        }
+
+        .type-badge {
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .type-stream {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .type-rent {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+
+        .type-buy {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .type-free {
+            background: rgba(168, 85, 247, 0.2);
+            color: #a855f7;
+            border: 1px solid rgba(168, 85, 247, 0.3);
         }
 
         /* --- MODAL --- */
@@ -966,26 +1005,34 @@
                 const platMap = {};
                 Object.keys(providers.results || {}).forEach(code => {
                     const country = providers.results[code];
-                    [...(country.flatrate || []), ...(country.rent || []), ...(country.buy || [])].forEach(p => {
-                        if (!platMap[p.provider_name]) platMap[p.provider_name] = { logo: p.logo_path, countries: [] };
-                        if (!platMap[p.provider_name].countries.find(c => c.code === code)) {
-                            let name = code; try { name = regionNames.of(code); } catch (e) { }
-                            platMap[p.provider_name].countries.push({ code, name });
-                        }
-                    });
+                    const addProvider = (list, typeName) => {
+                        (list || []).forEach(p => {
+                            if (!platMap[p.provider_name]) platMap[p.provider_name] = { logo: p.logo_path, countries: {} };
+                            if (!platMap[p.provider_name].countries[code]) {
+                                let name = code; try { name = regionNames.of(code); } catch (e) { }
+                                platMap[p.provider_name].countries[code] = { code, name, types: new Set() };
+                            }
+                            platMap[p.provider_name].countries[code].types.add(typeName);
+                        });
+                    };
+                    addProvider(country.flatrate, 'Stream');
+                    addProvider(country.free, 'Free');
+                    addProvider(country.rent, 'Rent');
+                    addProvider(country.buy, 'Buy');
                 });
                 const pList = document.getElementById('dProviders');
                 const keys = Object.keys(platMap);
                 pList.innerHTML = keys.length === 0 ? '<p>No streaming data found.</p>' : '';
                 keys.forEach(name => {
                     const data = platMap[name];
+                    const countriesArr = Object.values(data.countries).sort((a, b) => a.name.localeCompare(b.name));
                     pList.innerHTML += `
                         <div class="p-row">
                             <img src="${IMG + data.logo}" class="p-logo">
                             <div>
                                 <div style="font-weight:900; margin-bottom:8px;">${name}</div>
                                 <div style="display:flex; flex-wrap:wrap; gap:8px;">
-                                    ${data.countries.sort((a, b) => a.name.localeCompare(b.name)).map(c => `<span class="c-badge"><b>${c.code}</b> <span>${c.name}</span></span>`).join('')}
+                                    ${countriesArr.map(c => `<span class="c-badge"><b>${c.code}</b> <span class="country-name">${c.name}</span>${[...c.types].map(t => `<span class="type-badge type-${t.toLowerCase()}">${t}</span>`).join('')}</span>`).join('')}
                                 </div>
                             </div>
                         </div>`;
